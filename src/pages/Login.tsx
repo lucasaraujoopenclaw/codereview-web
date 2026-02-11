@@ -64,6 +64,16 @@ export function Login() {
               By signing in you agree to authenticate with Google.
             </p>
           )}
+
+          <div className="mt-6 flex items-center justify-center gap-4 text-xs text-gray-500">
+            <a href="/privacy" className="hover:text-gray-300 transition-colors">
+              Política de Privacidade
+            </a>
+            <span className="text-gray-700">•</span>
+            <a href="/terms" className="hover:text-gray-300 transition-colors">
+              Termos de Uso
+            </a>
+          </div>
         </div>
 
         {!googleClientId ? (
