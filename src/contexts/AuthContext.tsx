@@ -96,7 +96,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (googleIdToken: string) => {
     const response = await axios.post<BackendAuthResponse>(`${apiUrl}/auth/google`, {
-      token: googleIdToken,
+      idToken: googleIdToken,
     });
 
     const { token: jwtToken, user: userData } = response.data;
