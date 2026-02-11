@@ -5,8 +5,11 @@ import {
   GitPullRequest,
   Settings,
   Code2,
+  LogOut,
+  UserCircle,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { useAuth } from "../../contexts/AuthContext";
 
 const navItems = [
   { to: "/", icon: LayoutDashboard, label: "Dashboard" },
@@ -16,6 +19,8 @@ const navItems = [
 ];
 
 export function Sidebar() {
+  const { user, logout } = useAuth();
+
   return (
     <aside className="flex h-full w-64 flex-col bg-sidebar">
       {/* Logo */}
@@ -52,8 +57,39 @@ export function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="border-t border-sidebar-accent px-6 py-4">
-        <p className="text-xs text-gray-500">v0.1.0 — Development</p>
+      <div className="border-t border-sidebar-accent px-4 py-4 space-y-3">
+        <div className="flex items-center gap-3">
+          {user?.avatarUrl ? (
+            <img
+              src={user.avatarUrl}
+              alt={user.name}
+              className="h-9 w-9 rounded-full border border-sidebar-accent"
+              referrerPolicy="no-referrer"
+            />
+          ) : (
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-sidebar-hover border border-sidebar-accent">
+              <UserCircle className="h-5 w-5 text-sidebar-foreground" />
+            </div>
+          )}
+
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-medium text-white">
+              {user?.name ?? ""}
+            </p>
+            <p className="truncate text-xs text-gray-400">{user?.email ?? ""}</p>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => logout()}
+          className="w-full flex items-center justify-center gap-2 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm font-medium text-gray-200 transition-colors hover:bg-gray-700"
+        >
+          <LogOut className="h-4 w-4" />
+          Logout
+        </button>
+
+        <p className="text-xs text-gray-500 px-2">v0.1.0 — Development</p>
       </div>
     </aside>
   );
