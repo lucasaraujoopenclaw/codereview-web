@@ -4,6 +4,8 @@ import { Code2 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { useState } from "react";
 
+const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
+
 export function Login() {
   const { isAuthenticated, login } = useAuth();
   const navigate = useNavigate();
@@ -64,11 +66,11 @@ export function Login() {
           )}
         </div>
 
-        <p className="mt-6 text-center text-xs text-gray-600">
-          Configure <code className="text-gray-400">VITE_GOOGLE_CLIENT_ID</code>
-          {" "}
-          in your environment.
-        </p>
+        {!googleClientId ? (
+          <p className="mt-6 text-center text-xs text-gray-600">
+            Configure <code className="text-gray-400">VITE_GOOGLE_CLIENT_ID</code> in your environment.
+          </p>
+        ) : null}
       </div>
     </div>
   );
