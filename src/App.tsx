@@ -6,6 +6,8 @@ import { Repositories } from "./pages/Repositories";
 import { PullRequests } from "./pages/PullRequests";
 import { PullRequestDetail } from "./pages/PullRequestDetail";
 import { Settings } from "./pages/Settings";
+import { GitHubConnect } from "./pages/GitHubConnect";
+import { GitHubCallback } from "./pages/GitHubCallback";
 import { Login } from "./pages/Login";
 import { PrivacyPolicy } from "./pages/PrivacyPolicy";
 import { TermsOfService } from "./pages/TermsOfService";
@@ -29,6 +31,8 @@ export default function App() {
         <Route path="/pull-requests" element={<PullRequests />} />
         <Route path="/pull-requests/:id" element={<PullRequestDetail />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/settings/github" element={<GitHubConnect />} />
+        <Route path="/github/connected" element={<GitHubCallback />} />
       </Route>
     </Routes>
   );

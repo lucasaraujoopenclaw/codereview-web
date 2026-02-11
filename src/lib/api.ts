@@ -82,4 +82,45 @@ export async function getStats(): Promise<StatsResponse> {
   return data;
 }
 
+// GitHub Integration
+export interface GitHubStatus {
+  connected: boolean;
+  username?: string;
+  connectedAt?: string;
+}
+
+export interface GitHubRepo {
+  id: number;
+  name: string;
+  fullName: string;
+  description: string | null;
+  language: string | null;
+  private: boolean;
+  updatedAt: string;
+  enabled?: boolean;
+  qualityGateId?: string;
+}
+
+export async function getGitHubStatus(): Promise<GitHubStatus> {
+  const { data } = await api.get("/api/github/status");
+  return data;
+}
+
+export async function getGitHubRepos(): Promise<GitHubRepo[]> {
+  const { data } = await api.get("/api/github/repos");
+  return data;
+}
+
+export async function enableRepo(repoFullName: string): Promise<void> {
+  await api.post("/api/github/repos/enable", { repoFullName });
+}
+
+export async function disableRepo(id: string): Promise<void> {
+  await api.delete(`/api/github/repos/${id}/disable`);
+}
+
+export async function disconnectGitHub(): Promise<void> {
+  await api.delete("/api/github/disconnect");
+}
+
 export default api;
