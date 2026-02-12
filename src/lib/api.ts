@@ -107,19 +107,39 @@ export async function getGitHubStatus(): Promise<GitHubStatus> {
 }
 
 export async function getGitHubRepos(): Promise<GitHubRepo[]> {
-  const { data } = await api.get("/api/github/repos");
+  // Fetch GitHub repos and enabled repos in parallel
+  const [ghResponse, enabledResponse] = await Promise.all([
+    api.get("/api/github/repos"),
+    api.get("/api/repositories").catch(() => ({ data: [] })),
+  ]);
+
+  const ghRepos = ghResponse.data;
+  const enabledRepos: Record<string, unknown>[] = enabledResponse.data;
+
+  // Build map of enabled repos by fullName
+  const enabledMap = new Map<string, string>();
+  for (const r of enabledRepos) {
+    const fn = (r.fullName ?? r.full_name) as string;
+    if (fn) enabledMap.set(fn, r.id as string);
+  }
+
   // Backend returns snake_case, frontend expects camelCase
-  return data.map((repo: Record<string, unknown>) => ({
-    id: repo.id,
-    name: repo.name,
-    fullName: repo.full_name ?? repo.fullName,
-    description: repo.description,
-    language: repo.language,
-    private: repo.private,
-    updatedAt: repo.updated_at ?? repo.updatedAt,
-    htmlUrl: repo.html_url ?? repo.htmlUrl,
-    defaultBranch: repo.default_branch ?? repo.defaultBranch,
-  }));
+  return ghRepos.map((repo: Record<string, unknown>) => {
+    const fullName = (repo.full_name ?? repo.fullName) as string;
+    return {
+      id: repo.id,
+      name: repo.name,
+      fullName,
+      description: repo.description,
+      language: repo.language,
+      private: repo.private,
+      updatedAt: repo.updated_at ?? repo.updatedAt,
+      htmlUrl: repo.html_url ?? repo.htmlUrl,
+      defaultBranch: repo.default_branch ?? repo.defaultBranch,
+      enabled: enabledMap.has(fullName),
+      qualityGateId: enabledMap.get(fullName) ?? undefined,
+    };
+  });
 }
 
 export async function enableRepo(repoFullName: string): Promise<void> {
