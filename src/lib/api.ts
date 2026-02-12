@@ -108,7 +108,18 @@ export async function getGitHubStatus(): Promise<GitHubStatus> {
 
 export async function getGitHubRepos(): Promise<GitHubRepo[]> {
   const { data } = await api.get("/api/github/repos");
-  return data;
+  // Backend returns snake_case, frontend expects camelCase
+  return data.map((repo: Record<string, unknown>) => ({
+    id: repo.id,
+    name: repo.name,
+    fullName: repo.full_name ?? repo.fullName,
+    description: repo.description,
+    language: repo.language,
+    private: repo.private,
+    updatedAt: repo.updated_at ?? repo.updatedAt,
+    htmlUrl: repo.html_url ?? repo.htmlUrl,
+    defaultBranch: repo.default_branch ?? repo.defaultBranch,
+  }));
 }
 
 export async function enableRepo(repoFullName: string): Promise<void> {
