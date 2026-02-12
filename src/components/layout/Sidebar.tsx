@@ -8,6 +8,7 @@ import {
   LogOut,
   UserCircle,
   Github,
+  Bot,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { useAuth } from "../../contexts/AuthContext";
@@ -17,6 +18,7 @@ const navItems = [
   { to: "/repositories", icon: GitFork, label: "Repositories" },
   { to: "/pull-requests", icon: GitPullRequest, label: "Pull Requests" },
   { to: "/settings/github", icon: Github, label: "GitHub" },
+  { to: "/settings/openai", icon: Bot, label: "OpenAI" },
   { to: "/settings", icon: Settings, label: "Settings" },
 ];
 

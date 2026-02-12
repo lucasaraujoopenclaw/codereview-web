@@ -82,6 +82,25 @@ export async function getStats(): Promise<StatsResponse> {
   return data;
 }
 
+// OpenAI Settings
+export interface OpenAISettings {
+  configured: boolean;
+  last4: string | null;
+}
+
+export async function getOpenAISettings(): Promise<OpenAISettings> {
+  const { data } = await api.get("/api/settings/openai");
+  return data;
+}
+
+export async function setOpenAIKey(apiKey: string): Promise<void> {
+  await api.post("/api/settings/openai", { apiKey });
+}
+
+export async function deleteOpenAIKey(): Promise<void> {
+  await api.delete("/api/settings/openai");
+}
+
 // GitHub Integration
 export interface GitHubStatus {
   connected: boolean;
